@@ -25,5 +25,15 @@ export default defineConfig({
   plugins: [apiPlugin(), react()],
   resolve: {
     extensions: ['.js', '.jsx', '.json']
+  },
+  server: {
+    historyApiFallback: true,
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
   }
 })
