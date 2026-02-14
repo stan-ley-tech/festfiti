@@ -22,7 +22,7 @@ import Budget from './pages/Budget';
 import Sustainability from './pages/Sustainability';
 import FestBuddy from './pages/FestBuddy';
 import ManageEvent from './pages/ManageEvent';
-import UserSettings from './pages/UserSettings';
+import UserSettings from './pages/UserSettings.jsx';
 import NotFound from './pages/NotFound';
 import ChatWindow from './components/ChatWindow';
 import './styles/globals.css';
