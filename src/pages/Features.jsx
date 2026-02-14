@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Zap, Shield, BarChart3, Users, Ticket, DollarSign } from 'lucide-react';
+import { Zap, Shield, BarChart3, Users, Ticket, DollarSign } from 'lucide-react';
 import PublicNavbar from '../components/PublicNavbar';
 
 export default function FeaturesPage() {

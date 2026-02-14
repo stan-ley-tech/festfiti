@@ -1,10 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Calendar, Tag, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight } from 'lucide-react';
 import PublicNavbar from '../components/PublicNavbar';
 
 export default function UpdatesPage() {
-  const navigate = useNavigate();
 
   const updates = [
     {
