@@ -1,16 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Calendar, Ticket, DollarSign, Leaf, Bot, Users,
-  BarChart3, Shield, ArrowRight, Menu, X
+  Ticket, Bot,
+  BarChart3, Shield, ArrowRight
 } from 'lucide-react';
+import PublicNavbar from '../components/PublicNavbar';
 import logo from '../assets/fest_fiti_name_logo_black.png';
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-
-  const navLinks = ['Home', 'Features', 'Plans', 'Updates'];
 
   const features = [
     {
@@ -44,53 +42,7 @@ export default function LandingPage() {
         {/* Background Gradient - Simulates the light beam from top */}
         <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]" />
 
-        {/* Navigation - Minimalist & Centered */}
-        <nav className="fixed w-full z-50 top-0 transition-all duration-300 backdrop-blur-sm bg-white/70 border-b border-gray-100/50">
-          <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => navigate('/')}>
-              <img src={logo} alt="FestFiti" className="h-8 md:h-10 opacity-90 hover:opacity-100 transition-opacity" />
-            </div>
-
-            {/* Desktop Links - Centered like reference */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navLinks.map((link) => (
-                  <a key={link} href="#" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">
-                    {link}
-                  </a>
-              ))}
-            </div>
-
-            {/* Buttons */}
-            <div className="hidden md:flex items-center gap-4">
-              <button
-                  onClick={() => navigate('/events')}
-                  className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-              >
-                Browse Events
-              </button>
-              <button
-                  onClick={() => navigate('/login')}
-                  className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-              >
-                Sign In
-              </button>
-              <button
-                  onClick={() => navigate('/events')}
-                  className="bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all hover:scale-105 shadow-lg shadow-gray-200"
-              >
-                Find Events
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-gray-900">
-                {mobileMenuOpen ? <X /> : <Menu />}
-              </button>
-            </div>
-          </div>
-        </nav>
+        <PublicNavbar />
 
         {/* Hero Section */}
         <section className="relative pt-32 md:pt-48 pb-20 px-6 max-w-[1400px] mx-auto flex flex-col items-center text-center z-10">

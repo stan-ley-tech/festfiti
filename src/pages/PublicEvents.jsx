@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Search, Calendar, MapPin, Users, Clock, ArrowRight, Filter, X, Menu} from 'lucide-react';
+import {Search, Calendar, MapPin, Users, Clock, ArrowRight, Filter} from 'lucide-react';
+import PublicNavbar from '../components/PublicNavbar';
 import logo from '../assets/fest_fiti_name_logo_black.png';
 
 export default function PublicEventsPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-
-  const navLinks = ['Home', 'Features', 'Plans', 'Updates'];
 
   // Mock events data - in production this would come from API
   const events = [
@@ -90,53 +88,7 @@ export default function PublicEventsPage() {
 
   return (
     <div className="min-h-screen relative bg-gray-50">
-      {/* Navigation - Minimalist & Centered */}
-      <nav className="fixed w-full z-50 top-0 transition-all duration-300 backdrop-blur-sm bg-white/70 border-b border-gray-100/50">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => navigate('/')}>
-            <img src={logo} alt="FestFiti" className="h-8 md:h-10 opacity-90 hover:opacity-100 transition-opacity" />
-          </div>
-
-          {/* Desktop Links - Centered like reference */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-                <a key={link} href="#" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">
-                  {link}
-                </a>
-            ))}
-          </div>
-
-          {/* Buttons */}
-          <div className="hidden md:flex items-center gap-4">
-            <button
-                onClick={() => navigate('/events')}
-                className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-            >
-              Browse Events
-            </button>
-            <button
-                onClick={() => navigate('/login')}
-                className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-            >
-              Sign In
-            </button>
-            <button
-                onClick={() => navigate('/events')}
-                className="bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all hover:scale-105 shadow-lg shadow-gray-200"
-            >
-              Find Events
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-gray-900">
-              {mobileMenuOpen ? <X /> : <Menu />}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <PublicNavbar />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br mt-20 from-primary-600 to-primary-700 text-white py-20">
