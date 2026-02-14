@@ -98,14 +98,14 @@ export default function NotFoundPage() {
                 <div className="absolute bottom-0 w-full h-32 bg-blue-800/20 rounded-b-3xl border-4 border-blue-50/30 backdrop-blur-sm">
                   {/* Coffee liquid with filling animation */}
                   <div
-                    className="absolute bottom-2 left-2 right-2 bg-gradient-to-t from-blue-900 to-blue-700 rounded-b-2xl transition-all duration-300 ease-out"
+                    className="absolute bottom-2 left-2 right-2 bg-gradient-to-t rounded-t-xl from-blue-900 overflow-hidden to-blue-700 rounded-b-2xl transition-all duration-300 ease-out"
                     style={{ height: `${Math.min(coffeeLevel, 85)}%` }}
                   >
-                    <div className="absolute top-0 left-0 right-0 h-3 bg-blue-600 rounded-t-xl opacity-60"></div>
+                    <div className="absolute top-0 left-0 right-0 h-3 bg-blue-600 opacity-60"></div>
                   </div>
                 </div>
                 {/* Cup handle */}
-                <div className="absolute right-0 top-8 w-6 h-12 border-4 border-blue-50/30 rounded-r-xl"></div>
+                <div className="absolute -right-6 top-8 w-6 h-12 border-4 border-blue-50/30 rounded-r-xl"></div>
               </div>
             </div>
 
@@ -169,23 +169,27 @@ export default function NotFoundPage() {
             </div>
 
             {/* Coffee Status */}
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
               <div className="flex items-center justify-center mb-4">
-                <Coffee className="w-6 h-6 text-amber-600 mr-2" />
-                <span className="font-semibold text-amber-800">Coffee Meter</span>
+                <Coffee className="w-6 h-6 text-blue-600 mr-2" />
+                <span className="font-semibold text-blue-800">Coffee Meter</span>
               </div>
-              <div className="w-full bg-amber-200 rounded-full h-3 mb-2">
+              <div className="w-full bg-blue-200 rounded-full h-3 mb-2">
                 <motion.div
-                  className="bg-amber-600 h-3 rounded-full"
+                  className="bg-blue-600 h-3 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${coffeeLevel}%` }}
                   transition={{ duration: 0.1 }}
                 />
               </div>
-              <p className="text-sm text-amber-700">
-                {coffeeLevel < 30 ? "Need more coffee ☕" :
-                 coffeeLevel < 70 ? "Getting there... ☕☕" :
-                 "Almost ready! ☕☕☕"}
+              <p className="text-sm text-blue-700 flex items-center justify-center gap-1">
+                {coffeeLevel < 30 ? (
+                  <>Need more coffee <Coffee className="w-4 h-4" /></>
+                ) : coffeeLevel < 70 ? (
+                  <>Getting there... <Coffee className="w-4 h-4" /><Coffee className="w-4 h-4" /></>
+                ) : (
+                  <>Almost ready! <Coffee className="w-4 h-4" /><Coffee className="w-4 h-4" /><Coffee className="w-4 h-4" /></>
+                )}
               </p>
             </div>
 
@@ -193,7 +197,7 @@ export default function NotFoundPage() {
             <div className="space-y-4">
               <motion.button
                 onClick={() => navigate('/')}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-amber-600/20 transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-blue-600/20 transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
                 whileHover={{ y: -2 }}
                 whileTap={{ y: 0 }}
               >
@@ -230,19 +234,19 @@ export default function NotFoundPage() {
               <div className="flex flex-wrap justify-center gap-4 text-sm">
                 <button
                   onClick={() => navigate('/events')}
-                  className="text-amber-600 hover:text-amber-700 font-medium hover:underline"
+                  className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
                 >
                   Browse Events
                 </button>
                 <button
                   onClick={() => navigate('/login')}
-                  className="text-amber-600 hover:text-amber-700 font-medium hover:underline"
+                  className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
                 >
                   Sign In
                 </button>
                 <button
                   onClick={() => navigate('/app/dashboard')}
-                  className="text-amber-600 hover:text-amber-700 font-medium hover:underline"
+                  className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
                 >
                   Dashboard
                 </button>
@@ -250,8 +254,8 @@ export default function NotFoundPage() {
             </div>
 
             {/* Footer */}
-            <p className="mt-8 text-center text-xs text-gray-400 leading-relaxed">
-              While you wait, grab a coffee ☕<br/>
+            <p className="mt-8 text-center text-xs text-gray-400 leading-relaxed flex items-center justify-center gap-1">
+              While you wait, grab a coffee <Coffee className="w-3 h-3" />
               We'll have this page ready soon!
             </p>
           </div>
