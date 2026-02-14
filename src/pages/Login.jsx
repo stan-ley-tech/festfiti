@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { VerificationCodeInput } from '../components/VerificationCodeInput';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Settings, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import logo from '../assets/fest_fiti_name_logo_black.png';
 import celebrateImg from '../assets/login/celebrate.png';
 import watchImg from '../assets/login/look_at_a_watch.png';
@@ -10,6 +12,7 @@ import ecoImg from '../assets/login/eco_friendly.png';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -78,8 +81,15 @@ export default function LoginPage() {
     // Simulate verification - for demo, accept "123456"
     setTimeout(() => {
       if (code === '123456') {
-        // Successful login - redirect to dashboard
-        navigate('/app/dashboard');
+        // Login user with email
+        const userData = login(email);
+        
+        // Redirect based on role
+        if (userData.role === 'admin') {
+          navigate('/app/dashboard');
+        } else {
+          navigate('/user/dashboard');
+        }
       } else {
         setError('Invalid verification code');
         setCodeError(true);
@@ -106,9 +116,14 @@ export default function LoginPage() {
 
   const handleGitHubSignIn = () => {
     setIsLoading(true);
-    // For demo, just redirect to dashboard
+    // For demo, login with default admin email
     setTimeout(() => {
-      navigate('/app/dashboard');
+      const userData = login('admin@festfiti.com', 'GitHub User');
+      if (userData.role === 'admin') {
+        navigate('/app/dashboard');
+      } else {
+        navigate('/user/dashboard');
+      }
     }, 1000);
   };
 
@@ -241,9 +256,20 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                <p className="mt-6 text-center text-sm text-gray-500">
-                  Demo: Use any email, code is <span className="font-mono font-semibold text-primary-600">123456</span>
-                </p>
+                <div className="mt-6 text-center text-sm text-gray-500 space-y-2">
+                  <p>Demo code: <span className="font-mono font-semibold text-primary-600">123456</span></p>
+                  <div className="bg-gray-50 rounded-lg p-3 text-left">
+                    <p className="font-semibold text-gray-700 mb-1">Try these emails:</p>
+                    <p className="flex items-center gap-2">
+                      <Settings className="w-4 h-4 text-primary-600" />
+                      Admin: <span className="font-mono text-primary-600">admin@festfiti.com</span>
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <User className="w-4 h-4 text-primary-600" />
+                      User: <span className="font-mono text-primary-600">user@example.com</span>
+                    </p>
+                  </div>
+                </div>
               </>
             ) : (
               <div className="space-y-6">

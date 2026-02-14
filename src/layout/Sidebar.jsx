@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEvent } from '../context/eventHooks';
+import { useAuth } from '../context/AuthContext';
+import { getUserAvatar } from '../utils/avatars';
 import {
   LayoutDashboard,
   Calendar,
@@ -19,6 +21,7 @@ const Sidebar = ({ isCollapsed, isMobile, closeSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = useEvent();
+  const { user } = useAuth();
 
   const navigationItems = useMemo(() => [
     {
@@ -160,14 +163,16 @@ const Sidebar = ({ isCollapsed, isMobile, closeSidebar }) => {
       {(!isCollapsed && !isMobile) && (
         <div className="p-4 border-t border-gray-200">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-gray-600 text-sm font-medium">EO</span>
-            </div>
+            <img 
+              src={getUserAvatar(user?.email || 'admin@festfiti.com')} 
+              alt={user?.name || 'Event Organizer'}
+              className="w-8 h-8 border border-gray-600 rounded-full"
+            />
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium text-gray-900 truncate">
-                Event Organizer
+                {user?.name || 'Event Organizer'}
               </div>
-              <div className="text-xs text-gray-500">admin@festfiti.com</div>
+              <div className="text-xs text-gray-500">{user?.email || 'admin@festfiti.com'}</div>
             </div>
           </div>
         </div>

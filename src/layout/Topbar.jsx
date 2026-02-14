@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useEvent } from '../context/eventHooks';
+import { useAuth } from '../context/AuthContext';
+import { getUserAvatar } from '../utils/avatars';
 import {
   Search,
   Bell,
@@ -12,6 +14,7 @@ import {
 
 const Topbar = () => {
   const { state, actions } = useEvent();
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -151,13 +154,20 @@ const Topbar = () => {
           </div>
 
           {/* User Profile */}
-          <div className="flex items-center space-x-3">
-            <div className="hidden sm:block text-right">
-              <div className="text-sm font-medium text-gray-900">Event Organizer</div>
-              <div className="text-xs text-gray-500">Admin</div>
-            </div>
-            <button className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors">
-              <User className="w-4 h-4 text-gray-600" />
+          <div className="relative">
+            <button 
+              onClick={() => setShowNotifications(false)}
+              className="flex items-center space-x-3"
+            >
+              <div className="hidden sm:block text-right">
+                <div className="text-sm font-medium text-gray-900">{user?.name || 'Event Organizer'}</div>
+                <div className="text-xs text-gray-500">{user?.role || 'Admin'}</div>
+              </div>
+              <img 
+                src={getUserAvatar(user?.email || 'admin@festfiti.com')} 
+                alt={user?.name || 'Admin'}
+                className="w-8 h-8 rounded-full hover:shadow-lg transition-all cursor-pointer"
+              />
             </button>
           </div>
         </div>
