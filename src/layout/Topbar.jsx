@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useEvent } from '../context/eventHooks';
 import { useAuth } from '../context/AuthContext';
 import { getUserAvatar } from '../utils/avatars';
@@ -9,14 +10,18 @@ import {
   Ticket,
   Check,
   AlertTriangle,
-  Info
+  Info,
+  LogOut,
+  ChevronDown
 } from 'lucide-react';
 
 const Topbar = () => {
+  const navigate = useNavigate();
   const { state, actions } = useEvent();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const handleQuickScan = () => {
     actions.setCurrentPage('ticketguard');
@@ -53,6 +58,12 @@ const Topbar = () => {
       default:
         return 'border-blue-200 bg-blue-50';
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    setShowProfileDropdown(false);
+    navigate('/login');
   };
 
   return (
@@ -153,11 +164,14 @@ const Topbar = () => {
             )}
           </div>
 
-          {/* User Profile */}
+          {/* User Profile with Dropdown */}
           <div className="relative">
             <button 
-              onClick={() => setShowNotifications(false)}
-              className="flex items-center space-x-3"
+              onClick={() => {
+                setShowProfileDropdown(!showProfileDropdown);
+                setShowNotifications(false);
+              }}
+              className="flex items-center space-x-3 hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors"
             >
               <div className="hidden sm:block text-right">
                 <div className="text-sm font-medium text-gray-900">{user?.name || 'Event Organizer'}</div>
@@ -166,9 +180,34 @@ const Topbar = () => {
               <img 
                 src={getUserAvatar(user?.email || 'admin@festfiti.com')} 
                 alt={user?.name || 'Admin'}
-                className="w-8 h-8 rounded-full hover:shadow-lg transition-all cursor-pointer"
+                className="w-8 h-8 rounded-full hover:shadow-lg transition-all cursor-pointer border border-gray-200"
               />
+              <ChevronDown className="w-4 h-4 text-gray-500" />
             </button>
+
+            {/* Profile Dropdown */}
+            {showProfileDropdown && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowProfileDropdown(false)}
+                />
+                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-20 py-2">
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <p className="text-sm font-semibold text-gray-900">{user?.name || 'Event Organizer'}</p>
+                    <p className="text-xs text-gray-500 mt-1">{user?.email || 'admin@festfiti.com'}</p>
+                  </div>
+                  
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center space-x-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors text-left"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="text-sm font-medium">Logout</span>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

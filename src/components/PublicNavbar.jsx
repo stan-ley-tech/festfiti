@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { getUserAvatar } from '../utils/avatars';
 import logo from '../assets/fest_fiti_name_logo_black.png';
 
 const PublicNavbar = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated, isAdmin } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = ['Home', 'Features', 'Plans', 'Updates'];
@@ -36,12 +39,31 @@ const PublicNavbar = () => {
             >
               Browse Events
             </button>
-            <button
-              onClick={() => navigate('/login')}
-              className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-            >
-              Sign In
-            </button>
+            
+            {isAuthenticated() ? (
+              <button
+                onClick={() => navigate(isAdmin() ? '/app/dashboard' : '/user/dashboard')}
+                className="flex items-center space-x-2 text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+              >
+                <img 
+                  src={getUserAvatar(user?.email)} 
+                  alt={user?.name}
+                  className="w-8 h-8 rounded-full border border-gray-200"
+                />
+                <span className="flex items-center space-x-1">
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Dashboard</span>
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+              >
+                Sign In
+              </button>
+            )}
+            
             <button
               onClick={() => navigate('/events')}
               className="bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all hover:scale-105 shadow-lg shadow-gray-200"
@@ -79,12 +101,31 @@ const PublicNavbar = () => {
                   >
                     Browse Events
                   </button>
-                  <button
-                    onClick={() => navigate('/login')}
-                    className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                  >
-                    Sign In
-                  </button>
+                  
+                  {isAuthenticated() ? (
+                    <button
+                      onClick={() => navigate(isAdmin() ? '/app/dashboard' : '/user/dashboard')}
+                      className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                    >
+                      <img 
+                        src={getUserAvatar(user?.email)} 
+                        alt={user?.name}
+                        className="w-8 h-8 rounded-full border border-gray-200"
+                      />
+                      <span className="flex items-center space-x-1">
+                        <LayoutDashboard className="w-4 h-4" />
+                        <span>Dashboard</span>
+                      </span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => navigate('/login')}
+                      className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                    >
+                      Sign In
+                    </button>
+                  )}
+                  
                   <button
                     onClick={() => navigate('/events')}
                     className="w-full bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all"
