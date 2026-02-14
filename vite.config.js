@@ -23,4 +23,7 @@ const apiPlugin = () => ({
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [apiPlugin(), react()],
+  resolve: {
+    extensions: ['.js', '.jsx', '.json']
+  }
 })

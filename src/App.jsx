@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { EventProvider } from './context/EventContext';
-import { AuthProvider } from './context/AuthContext.jsx';
+import { AuthProvider } from './context/AuthContext';
 import Layout from './layout/Layout';
 import UserLayout from './layout/UserLayout';
 import Landing from './pages/Landing';

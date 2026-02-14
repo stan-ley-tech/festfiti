@@ -33,43 +33,43 @@ const PublicNavbar = () => {
 
           {/* Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <button
-              onClick={() => navigate('/events')}
-              className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-            >
-              Browse Events
-            </button>
-            
             {isAuthenticated() ? (
+              /* Logged In - Just show avatar */
               <button
                 onClick={() => navigate(isAdmin() ? '/app/dashboard' : '/user/dashboard')}
-                className="flex items-center space-x-2 text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                className="flex items-center space-x-2 hover:opacity-80 transition-all"
               >
                 <img 
                   src={getUserAvatar(user?.email)} 
                   alt={user?.name}
-                  className="w-8 h-8 rounded-full border border-gray-200"
+                  className="w-10 h-10 rounded-full border-2 border-gray-200 hover:border-primary-500 transition-all shadow-sm hover:shadow-md"
                 />
-                <span className="flex items-center space-x-1">
-                  <LayoutDashboard className="w-4 h-4" />
-                  <span>Dashboard</span>
-                </span>
               </button>
             ) : (
-              <button
-                onClick={() => navigate('/login')}
-                className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
-              >
-                Sign In
-              </button>
+              /* Logged Out - Show all buttons */
+              <>
+                <button
+                  onClick={() => navigate('/events')}
+                  className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                >
+                  Browse Events
+                </button>
+                
+                <button
+                  onClick={() => navigate('/login')}
+                  className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors"
+                >
+                  Sign In
+                </button>
+                
+                <button
+                  onClick={() => navigate('/events')}
+                  className="bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all hover:scale-105 shadow-lg shadow-gray-200"
+                >
+                  Find Events
+                </button>
+              </>
             )}
-            
-            <button
-              onClick={() => navigate('/events')}
-              className="bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all hover:scale-105 shadow-lg shadow-gray-200"
-            >
-              Find Events
-            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -95,43 +95,60 @@ const PublicNavbar = () => {
               ))}
               <div className="pt-4 pb-3 border-t border-gray-200">
                 <div className="flex items-center px-3 space-y-3 flex-col">
-                  <button
-                    onClick={() => navigate('/events')}
-                    className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                  >
-                    Browse Events
-                  </button>
-                  
                   {isAuthenticated() ? (
+                    /* Logged In Mobile - Just avatar and dashboard link */
                     <button
-                      onClick={() => navigate(isAdmin() ? '/app/dashboard' : '/user/dashboard')}
-                      className="w-full flex items-center space-x-3 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                      onClick={() => {
+                        navigate(isAdmin() ? '/app/dashboard' : '/user/dashboard');
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center justify-center space-x-3 px-3 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
                     >
                       <img 
                         src={getUserAvatar(user?.email)} 
                         alt={user?.name}
-                        className="w-8 h-8 rounded-full border border-gray-200"
+                        className="w-10 h-10 rounded-full border-2 border-gray-200"
                       />
-                      <span className="flex items-center space-x-1">
-                        <LayoutDashboard className="w-4 h-4" />
-                        <span>Dashboard</span>
-                      </span>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-semibold text-gray-900">{user?.name || 'User'}</p>
+                        <p className="text-xs text-gray-500">Go to Dashboard</p>
+                      </div>
+                      <LayoutDashboard className="w-5 h-5 text-gray-400" />
                     </button>
                   ) : (
-                    <button
-                      onClick={() => navigate('/login')}
-                      className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                    >
-                      Sign In
-                    </button>
+                    /* Logged Out Mobile - Show all options */
+                    <>
+                      <button
+                        onClick={() => {
+                          navigate('/events');
+                          setMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                      >
+                        Browse Events
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          navigate('/login');
+                          setMobileMenuOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                      >
+                        Sign In
+                      </button>
+                      
+                      <button
+                        onClick={() => {
+                          navigate('/events');
+                          setMobileMenuOpen(false);
+                        }}
+                        className="w-full bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all"
+                      >
+                        Find Events
+                      </button>
+                    </>
                   )}
-                  
-                  <button
-                    onClick={() => navigate('/events')}
-                    className="w-full bg-gray-900 hover:bg-black text-white text-sm font-medium px-5 py-2.5 rounded-full transition-all"
-                  >
-                    Find Events
-                  </button>
                 </div>
               </div>
             </div>
