@@ -11,7 +11,15 @@ import {
   RefreshCw,
   CheckCircle,
   Filter,
-  X
+  X,
+  Music,
+  Briefcase,
+  UtensilsCrossed,
+  Trophy,
+  Palette,
+  Download,
+  QrCode,
+  Grid3x3
 } from 'lucide-react';
 
 export default function TicketExchange() {
@@ -65,7 +73,14 @@ export default function TicketExchange() {
     }
   ];
 
-  const categories = ['all', 'Music', 'Conference', 'Food', 'Sports', 'Arts'];
+  const categories = [
+    { id: 'all', label: 'All', icon: Grid3x3 },
+    { id: 'Music', label: 'Music', icon: Music },
+    { id: 'Conference', label: 'Conference', icon: Briefcase },
+    { id: 'Food', label: 'Food', icon: UtensilsCrossed },
+    { id: 'Sports', label: 'Sports', icon: Trophy },
+    { id: 'Arts', label: 'Arts', icon: Palette }
+  ];
 
   const filteredTickets = myTickets.filter(ticket => {
     const matchesSearch = ticket.eventName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -73,6 +88,10 @@ export default function TicketExchange() {
     const matchesCategory = selectedCategory === 'all' || ticket.category === selectedCategory;
     return matchesSearch && matchesCategory && ticket.status === 'active';
   });
+
+  const handleDownloadQR = (ticket) => {
+    window.open(ticket.qrCode, '_blank');
+  };
 
   const handleExchangeRequest = () => {
     if (!recipientEmail) {
@@ -171,21 +190,25 @@ export default function TicketExchange() {
           {/* Category Filters */}
           <div className="flex items-center space-x-2 overflow-x-auto pb-2">
             <Filter className="w-5 h-5 text-gray-500 flex-shrink-0" />
-            {categories.map((category) => (
-              <motion.button
-                key={category}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-5 py-2 rounded-full font-medium whitespace-nowrap transition-all ${
-                  selectedCategory === category
-                    ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </motion.button>
-            ))}
+            {categories.map((category) => {
+              const CategoryIcon = category.icon;
+              return (
+                <motion.button
+                  key={category.id}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`px-5 py-2 rounded-full font-medium whitespace-nowrap transition-all flex items-center gap-2 ${
+                    selectedCategory === category.id
+                      ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <CategoryIcon className="w-4 h-4" />
+                  {category.label}
+                </motion.button>
+              );
+            })}
           </div>
         </div>
       </motion.div>
@@ -233,7 +256,7 @@ export default function TicketExchange() {
           </button>
         </motion.div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence mode="popLayout">
             {filteredTickets.map((ticket, index) => (
               <motion.div
@@ -245,68 +268,86 @@ export default function TicketExchange() {
                 exit="hidden"
                 whileHover="hover"
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 cursor-pointer group"
+                className="group relative bg-white rounded-[2rem] shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 cursor-pointer"
                 onClick={() => setSelectedTicket(ticket)}
               >
-                {/* Ticket Header */}
-                <div className="relative h-48 bg-gradient-to-br from-primary-400 to-purple-600 overflow-hidden">
+                {/* Header Image */}
+                <div className="h-32 bg-gray-200 relative overflow-hidden">
                   <img
                     src={ticket.image}
                     alt={ticket.eventName}
-                    className="w-full h-full object-cover opacity-40 group-hover:opacity-50 group-hover:scale-110 transition-all duration-500"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute top-4 right-4">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 right-4 animate-fade-in">
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ delay: index * 0.1 + 0.3, type: 'spring' }}
-                      className="px-3 py-1 bg-white text-primary-600 rounded-full text-xs font-semibold shadow-lg"
+                      className="px-4 py-1.5 rounded-full text-xs font-bold tracking-wide backdrop-blur-md shadow-sm bg-white/90 text-primary-600"
                     >
                       {ticket.category}
                     </motion.span>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-white bg-opacity-90 backdrop-blur-sm px-3 py-2 rounded-lg inline-block">
-                      <span className="text-sm font-bold text-gray-900">{ticket.ticketType}</span>
+                </div>
+
+                {/* Overlapping "Avatar" (Event Icon) */}
+                <div className="relative flex justify-center -mt-10 mb-3">
+                  <div className="p-1.5 bg-white rounded-full shadow-lg">
+                    <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center border-2 border-gray-100 overflow-hidden">
+                      <img 
+                        src={`https://api.dicebear.com/9.x/icons/svg?seed=${ticket.eventName}`}
+                        alt="Event Icon"
+                        className="w-full h-full"
+                      />
                     </div>
                   </div>
                 </div>
 
-                {/* Ticket Body */}
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors">
+                {/* Content */}
+                <div className="px-6 pb-6 text-center">
+                  <h3 className="text-xl font-bold text-gray-900 mb-1 leading-tight group-hover:text-primary-600 transition-colors">
                     {ticket.eventName}
                   </h3>
+                  <p className="text-gray-500 text-sm mb-6 flex items-center justify-center gap-1">
+                    <MapPin className="w-3 h-3" />
+                    {ticket.venue}
+                  </p>
 
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <Calendar className="w-4 h-4 mr-2 flex-shrink-0 text-primary-500" />
-                      {new Date(ticket.eventDate).toLocaleDateString('en-US', {
-                        weekday: 'short',
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
+                  {/* Stats Row */}
+                  <div className="bg-gray-50 rounded-2xl p-4 mb-6 grid grid-cols-3 gap-2 divide-x divide-gray-200">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Date</div>
+                      <div className="font-bold text-gray-800 text-sm">
+                        {new Date(ticket.eventDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </div>
                     </div>
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <Clock className="w-4 h-4 mr-2 flex-shrink-0 text-primary-500" />
-                      {ticket.eventTime}
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Time</div>
+                      <div className="font-bold text-gray-800 text-sm">{ticket.eventTime}</div>
                     </div>
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <MapPin className="w-4 h-4 mr-2 flex-shrink-0 text-primary-500" />
-                      <span className="line-clamp-1">{ticket.venue}</span>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Type</div>
+                      <div className="font-bold text-primary-600 text-sm">{ticket.ticketType}</div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  {/* Price & Exchange Button */}
+                  <div className="flex items-center justify-between gap-4 border-t border-gray-100 pt-4">
                     <div className="text-2xl font-bold text-primary-600">{ticket.price}</div>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="flex items-center space-x-2 bg-gradient-to-r from-primary-600 to-purple-600 hover:from-primary-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition-all"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedTicket(ticket);
+                      }}
+                      className="flex items-center gap-2 bg-gradient-to-r from-primary-600 to-purple-600 text-white rounded-full py-2.5 px-6 font-medium text-sm hover:from-primary-700 hover:to-purple-700 transition-all shadow-lg shadow-primary-200"
                     >
-                      <span>Exchange</span>
                       <RefreshCw className="w-4 h-4" />
+                      Exchange
                     </motion.button>
                   </div>
                 </div>

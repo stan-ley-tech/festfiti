@@ -9,6 +9,9 @@ import Login from './pages/Login';
 import PublicEvents from './pages/PublicEvents';
 import EventDetails from './pages/EventDetails';
 import BookEvent from './pages/BookEvent';
+import Features from './pages/Features';
+import Plans from './pages/Plans';
+import Updates from './pages/Updates';
 import Dashboard from './pages/Dashboard';
 import UserDashboard from './pages/UserDashboard';
 import TicketExchange from './pages/TicketExchange';
@@ -19,6 +22,7 @@ import Budget from './pages/Budget';
 import Sustainability from './pages/Sustainability';
 import FestBuddy from './pages/FestBuddy';
 import ManageEvent from './pages/ManageEvent';
+import UserSettings from './pages/UserSettings';
 import NotFound from './pages/NotFound';
 import ChatWindow from './components/ChatWindow';
 import './styles/globals.css';
@@ -36,12 +40,16 @@ function App() {
               <Route path="/events" element={<PublicEvents />} />
               <Route path="/event/:eventId" element={<EventDetails />} />
               <Route path="/book/:eventId" element={<BookEvent />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/plans" element={<Plans />} />
+              <Route path="/updates" element={<Updates />} />
 
               {/* User Dashboard Routes */}
               <Route path="/user" element={<UserLayout />}>
                 <Route index element={<Navigate to="/user/dashboard" replace />} />
                 <Route path="dashboard" element={<UserDashboard />} />
                 <Route path="exchange" element={<TicketExchange />} />
+                <Route path="settings" element={<UserSettings />} />
               </Route>
 
               {/* Admin Dashboard Routes - Event Organizers */}

@@ -121,7 +121,7 @@ export default function NotFoundPage() {
               >
                 <div className="flex items-center justify-center mb-4">
                   {React.createElement(coffeeMessages[activeSlide].icon, {
-                    className: `w-8 h-8 mr-3 ${coffeeMessages[activeSlide].color}`
+                    className: `w-8 h-8 mr-3 text-gray-50 ${coffeeMessages[activeSlide].color}`
                   })}
                   <h2 className="text-4xl font-bold">
                     {coffeeMessages[activeSlide].title}

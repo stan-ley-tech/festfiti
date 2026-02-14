@@ -10,7 +10,12 @@ const PublicNavbar = () => {
   const { user, isAuthenticated, isAdmin } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks = ['Home', 'Features', 'Plans', 'Updates'];
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Features', path: '/features' },
+    { name: 'Plans', path: '/plans' },
+    { name: 'Updates', path: '/updates' }
+  ];
 
   return (
     <>
@@ -25,9 +30,13 @@ const PublicNavbar = () => {
           {/* Desktop Links - Centered like reference */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a key={link} href="#" className="text-sm font-medium text-gray-600 hover:text-black transition-colors">
-                {link}
-              </a>
+              <button
+                key={link.name}
+                onClick={() => navigate(link.path)}
+                className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+              >
+                {link.name}
+              </button>
             ))}
           </div>
 
@@ -85,13 +94,16 @@ const PublicNavbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-100">
               {navLinks.map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                <button
+                  key={link.name}
+                  onClick={() => {
+                    navigate(link.path);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                 >
-                  {link}
-                </a>
+                  {link.name}
+                </button>
               ))}
               <div className="pt-4 pb-3 border-t border-gray-200">
                 <div className="flex items-center px-3 space-y-3 flex-col">

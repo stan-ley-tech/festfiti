@@ -213,93 +213,94 @@ export default function UserDashboard() {
             </button>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTickets.map((ticket) => (
               <div
                 key={ticket.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all"
+                className="group relative bg-white rounded-[2rem] shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100"
               >
-                {/* Ticket Header */}
-                <div className="relative h-40 bg-gradient-to-br from-primary-400 to-primary-600">
+                {/* Header Image */}
+                <div className="h-32 bg-gray-200 relative overflow-hidden">
                   <img
                     src={ticket.image}
                     alt={ticket.eventName}
-                    className="w-full h-full object-cover opacity-50"
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute top-4 right-4">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  
+                  {/* Status Badge */}
+                  <div className="absolute top-4 right-4 animate-fade-in">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wide backdrop-blur-md shadow-sm ${
                         ticket.status === 'active'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
+                          ? 'bg-white/90 text-green-700'
+                          : 'bg-gray-100/90 text-gray-600'
                       }`}
                     >
-                      {ticket.status === 'active' ? '✓ Active' : '✓ Used'}
+                      {ticket.status === 'active' ? 'ACTIVE' : 'USED'}
                     </span>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-white px-3 py-1 rounded-full inline-block">
-                      <span className="text-xs font-semibold text-primary-600">
-                        {ticket.ticketType}
-                      </span>
+                </div>
+
+                {/* Overlapping "Avatar" (Event Icon/QR) */}
+                <div className="relative flex justify-center -mt-10 mb-3">
+                  <div className="p-1.5 bg-white rounded-full shadow-lg">
+                    <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center border-2 border-gray-100 overflow-hidden">
+                      <img 
+                        src={`https://api.dicebear.com/9.x/icons/svg?seed=${ticket.eventName}`}
+                        alt="Event Icon"
+                        className="w-full h-full"
+                      />
                     </div>
                   </div>
                 </div>
 
-                {/* Ticket Body */}
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2">
+                {/* Content */}
+                <div className="px-6 pb-6 text-center">
+                  <h3 className="text-xl font-bold text-gray-900 mb-1 leading-tight">
                     {ticket.eventName}
                   </h3>
+                  <p className="text-gray-500 text-sm mb-6 flex items-center justify-center gap-1">
+                     <MapPin className="w-3 h-3" />
+                     {ticket.venue}
+                  </p>
 
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
-                      {new Date(ticket.eventDate).toLocaleDateString('en-US', {
-                        weekday: 'short',
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
+                  {/* Stats Row */}
+                  <div className="bg-gray-50 rounded-2xl p-4 mb-6 grid grid-cols-3 gap-2 divide-x divide-gray-200">
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Date</div>
+                      <div className="font-bold text-gray-800 text-sm">
+                        {new Date(ticket.eventDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                      </div>
                     </div>
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <Clock className="w-4 h-4 mr-2 flex-shrink-0" />
-                      {ticket.eventTime}
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Time</div>
+                      <div className="font-bold text-gray-800 text-sm">{ticket.eventTime}</div>
                     </div>
-                    <div className="flex items-center text-gray-600 text-sm">
-                      <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
-                      <span className="line-clamp-1">{ticket.venue}</span>
+                    <div className="text-center">
+                      <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Type</div>
+                      <div className="font-bold text-primary-600 text-sm">{ticket.ticketType}</div>
                     </div>
                   </div>
 
-                  {/* QR Code Section */}
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4 text-center">
-                    <img
-                      src={ticket.qrCode}
-                      alt="QR Code"
-                      className="w-32 h-32 mx-auto mb-2"
-                    />
-                    <p className="text-xs text-gray-500 font-mono">{ticket.id}</p>
-                  </div>
+                  {/* Actions (Social Style) */}
+                  <div className="flex items-center justify-between gap-4 border-t border-gray-100 pt-4">
+                     <button 
+                       onClick={() => handleDownloadQR(ticket)}
+                       className="p-2 rounded-full hover:bg-gray-50 text-gray-400 hover:text-primary-600 transition-colors tooltip"
+                       title="Download Ticket"
+                     >
+                       <Download className="w-5 h-5" />
+                     </button>
+                     
+                     <button className="flex-1 bg-gray-900 text-white rounded-full py-2.5 px-4 font-medium text-sm hover:bg-black transition-all shadow-lg shadow-gray-200 flex items-center justify-center gap-2 group-hover:scale-105">
+                       <QrCode className="w-4 h-4" />
+                       Show QR Code
+                     </button>
 
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleDownloadQR(ticket)}
-                      className="flex-1 flex items-center justify-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition-all text-sm"
-                    >
-                      <Download className="w-4 h-4" />
-                      <span>Download</span>
-                    </button>
-                     {ticket.status === 'active' && (
-                      <button
-                        onClick={() => handleExchangeTicket()}
-                        className="flex-1 flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-semibold transition-all text-sm"
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                        <span>Exchange</span>
-                      </button>
-                    )}
+                     <div className="p-2 rounded-full text-gray-400">
+                       <div className="w-5 h-5" /> {/* Spacer or extra icon */}
+                     </div>
                   </div>
                 </div>
               </div>
