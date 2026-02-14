@@ -5,6 +5,7 @@ import {
   ArrowLeft, Ticket, CheckCircle, Shield, DollarSign
 } from 'lucide-react';
 import logo from '../assets/fest_fiti_name_logo_black.png';
+import eventImage from '../assets/fest_fiti_mockup.jpg';
 
 export default function EventDetailsPage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function EventDetailsPage() {
     venue: 'Kenyatta International Convention Centre',
     location: 'Nairobi, Kenya',
     category: 'Music',
-    image: '/src/assets/fest_fiti_mockup.jpg',
+    image: eventImage,
     price: 5000,
     availableTickets: 450,
     totalCapacity: 5000,
